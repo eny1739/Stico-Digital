@@ -1,7 +1,6 @@
 package com.enigma.interviewproject.repo;
 
 import com.enigma.interviewproject.entity.Book;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -10,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface BookRepository extends CrudRepository<Book, String> {
@@ -18,7 +18,7 @@ public interface BookRepository extends CrudRepository<Book, String> {
         public List<Book> findAllBook();
 
         @Query(value = "SELECT * FROM mst_book WHERE id=?", nativeQuery = true)
-        public Book findById();
+        public Optional<Book> findById(String id);
 
         @Modifying
         @Query(value = "INSERT INTO mst_book(id, title, publisher, year, price, category, count) values (:id, :title, :publisher, :year, :price, :category, :count)", nativeQuery = true)
@@ -30,7 +30,7 @@ public interface BookRepository extends CrudRepository<Book, String> {
 
         @Modifying
         @Query(value = "DELETE FROM mst_book WHERE id=?", nativeQuery = true)
-        public void deleteById();
+        public void deleteById(String id);
 
 
 }

@@ -19,17 +19,17 @@ public class BookServiceImpl implements BookService{
     BookRepository bookRepository;
 
     @Override
-    public void create(Book book) {
+    public Book create(Book book) {
         String uuid = UUID.randomUUID().toString().replaceAll("-","");
         while (bookRepository.findById(uuid).isPresent()){
             uuid = UUID.randomUUID().toString().replaceAll("-","");
         }
         bookRepository.createBook(uuid, book.getTitle(), book.getPublisher(), book.getYear(), book.getPrice(), book.getCategory(), book.getCount());
+        return getById(uuid);
     }
 
     @Override
     public List<Book> findAll() {
-        System.out.println();
         return bookRepository.findAllBook();
     }
 
@@ -49,8 +49,9 @@ public class BookServiceImpl implements BookService{
     }
 
     @Override
-    public void update(Book book) {
+    public Book update(Book book) {
         getById(book.getId());
         bookRepository.updateBook(book.getTitle(), book.getPublisher(), book.getYear(), book.getPrice(), book.getCategory(), book.getCount(), book.getId());
+        return book;
     }
 }

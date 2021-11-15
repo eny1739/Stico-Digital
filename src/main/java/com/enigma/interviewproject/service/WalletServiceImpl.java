@@ -8,7 +8,8 @@ import java.util.List;
 @Service
 public class WalletServiceImpl implements WalletService{
     @Override
-    public void create(Wallet wallet) {
+    public Wallet create(Wallet wallet) {
+        return null;
     }
 
     @Override
@@ -26,7 +27,8 @@ public class WalletServiceImpl implements WalletService{
         return null;
     }
 
-//    @Override
-    public void update(Wallet wallet) {
+    @Override
+    public Wallet update(Wallet wallet) {
+        return null;
     }
 }
