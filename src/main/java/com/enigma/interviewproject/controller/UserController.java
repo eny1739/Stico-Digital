@@ -22,16 +22,6 @@ public class UserController {
     @Autowired
     UserAccountServiceImpl userAccountService;
 
-    @Autowired
-    UserDetailsServiceDBImpl userDetailsServiceDB;
-
-    @Autowired
-    AuthenticationManager authenticationManager;
-
-    @Autowired
-    JwtTokenUtil jwtTokenUtil;
-
-
 
     @GetMapping("/users")
     public List<UserAccount> findAllBooks(){
@@ -48,15 +38,9 @@ public class UserController {
         return userAccountService.create(userAccount);
     }
 
-    @PostMapping("/login")
+    @PostMapping("/signin")
     public Map<String, Object> signin(@RequestBody UserCredential userCredential){
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userCredential.getUsername(), userCredential.getPassword());
-        authenticationManager.authenticate(usernamePasswordAuthenticationToken);
-        UserDetails userDetails = userDetailsServiceDB.loadUserByUsername(userCredential.getUsername());
-        String token = jwtTokenUtil.generateToken(userDetails);
-        Map<String, Object> tokenWrapper = new HashMap<>();
-        tokenWrapper.put("token", token);
-        return tokenWrapper;
+        return userAccountService.signIn(userCredential);
     }
 
     @PostMapping("/register")

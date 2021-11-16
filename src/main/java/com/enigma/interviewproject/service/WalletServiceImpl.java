@@ -3,6 +3,7 @@ package com.enigma.interviewproject.service;
 import com.enigma.interviewproject.entity.UserAccount;
 import com.enigma.interviewproject.entity.Wallet;
 import com.enigma.interviewproject.repo.WalletRepository;
+import com.enigma.interviewproject.util.WalletCategory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,12 @@ public class WalletServiceImpl implements WalletService{
     @Autowired
     UserAccountService userAccountService;
 
+    private void walletTypeValidation(Wallet wallet) {
+        if(!(wallet.getName().equals("AVA") || wallet.getName().equals("DONO") || wallet.getName().equals("GAPAY"))){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Jenis wallet tidak ada");
+        }
+    }
+
     @Override
     public Wallet create(Wallet wallet) {
         String uuid = UUID.randomUUID().toString().replaceAll("-","");
@@ -29,9 +36,10 @@ public class WalletServiceImpl implements WalletService{
             uuid = UUID.randomUUID().toString().replaceAll("-","");
         }
         UserAccount userAccount = userAccountService.getById(wallet.getUserId());
-        wallet.setUser(userAccount);
-        walletRepository.createWallet(uuid, wallet.getName(), wallet.getBalance(), wallet.getUserId());
-        return getById(wallet.getId());
+        wallet.setUserAccount(userAccount);
+        walletTypeValidation(wallet);
+        walletRepository.createWallet(uuid, wallet.getName(), wallet.getBalance(), wallet.getUserAccount().getId());
+        return getById(uuid);
     }
 
     @Override
@@ -57,7 +65,8 @@ public class WalletServiceImpl implements WalletService{
     @Override
     public Wallet update(Wallet wallet) {
         getById(wallet.getId());
-        walletRepository.updateWallet(wallet.getId(), wallet.getName(), wallet.getBalance(), wallet.getUserId());
+        walletTypeValidation(wallet);
+        walletRepository.updateWallet(wallet.getName(), wallet.getBalance(), wallet.getUserId(), wallet.getId());
         return wallet;
     }
 }

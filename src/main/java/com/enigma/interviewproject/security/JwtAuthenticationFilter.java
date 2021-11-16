@@ -17,21 +17,29 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Autowired
-    JwtTokenUtil jwtTokenUtil;
+    private JwtTokenUtil jwtTokenUtil;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String authorizeHeader = request.getHeader("Authorization");
-        if (authorizeHeader==null||!authorizeHeader.startsWith("Bearer ")){
+
+        String authorizedHeader = request.getHeader("Authorization");
+
+        if(authorizedHeader==null || !authorizedHeader.startsWith("Bearer ")){
             filterChain.doFilter(request, response);
             return;
         }
-        String token = authorizeHeader.replace("Bearer ","");
+
+        String token = authorizedHeader.replace("Bearer ", "");
+
         UserDetails userDetails = null;
 
         userDetails = jwtTokenUtil.parseToken(token);
+
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+
         SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-        filterChain.doFilter(request,response);
+
+        filterChain.doFilter(request, response);
+
     }
 }

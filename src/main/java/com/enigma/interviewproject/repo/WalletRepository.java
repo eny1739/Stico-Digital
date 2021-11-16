@@ -24,9 +24,10 @@ public interface WalletRepository extends CrudRepository<Wallet, String> {
 
     @Modifying
     @Query(value = "UPDATE mst_wallet SET name=?, balance=?, user_id=? WHERE id=?", nativeQuery = true)
-    public void updateWallet(String id, String name, Integer balance, String user_id);
+    public void updateWallet( String name, Integer balance, String user_id, String id);
 
     @Modifying
     @Query(value = "DELETE FROM mst_wallet WHERE id=?", nativeQuery = true)
     public void deleteById(String id);
+
 }

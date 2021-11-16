@@ -4,8 +4,8 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "tx_user_do_transactions")
-public class Transaction {
+@Table(name = "tx_user_buy_books")
+public class TransactionBook {
 
     @Id
     private String id;
@@ -21,7 +21,7 @@ public class Transaction {
     private Integer subTotal;
     private Date transactionDate;
 
-    public Transaction(UserAccount userAccount, Book book, Integer count, Integer subTotal, Date transactionDate) {
+    public TransactionBook(UserAccount userAccount, Book book, Integer count, Integer subTotal, Date transactionDate) {
         this.userAccount = userAccount;
         this.book = book;
         this.count = count;
@@ -29,7 +29,7 @@ public class Transaction {
         this.transactionDate = transactionDate;
     }
 
-    public Transaction() {
+    public TransactionBook() {
     }
 
     public String getId() {

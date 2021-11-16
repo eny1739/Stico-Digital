@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.sql.Date;
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
@@ -64,5 +65,18 @@ public class Book {
 
     public Integer getCount() {
         return count;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Book book = (Book) o;
+        return Objects.equals(id, book.id) && Objects.equals(title, book.title) && Objects.equals(publisher, book.publisher) && Objects.equals(year, book.year) && Objects.equals(price, book.price) && Objects.equals(category, book.category) && Objects.equals(count, book.count);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, publisher, year, price, category, count);
     }
 }

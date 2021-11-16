@@ -1,5 +1,6 @@
 package com.enigma.interviewproject.security;
 
+import com.enigma.interviewproject.repo.UserRepository;
 import com.enigma.interviewproject.service.UserDetailsServiceDBImpl;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -13,25 +14,27 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
 @Component
 public class JwtTokenUtil {
-    @Value("${secret}")
+
+    @Value("${SECRET}")
     private String secret;
 
     @Autowired
-    UserDetailsServiceDBImpl userDetailsServiceDB;
+    private UserDetailsServiceDBImpl userDetailsServiceDB;
 
     public String generateToken(UserDetails userDetails){
+
         Map<String, Object> claims = new HashMap<>();
-        claims.put("username", userDetails.getUsername());
+        claims.put("role", userDetails.getAuthorities());
 
         String token = Jwts.builder()
                 .setClaims(claims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis()+(10*60*1000)))
-                .signWith(SignatureAlgorithm.HS512,secret).compact();
+                .setExpiration(new Date(System.currentTimeMillis()+(60*60*10000)))
+                .signWith(SignatureAlgorithm.HS512, secret).compact();
+
         return token;
     }
 
@@ -40,5 +43,4 @@ public class JwtTokenUtil {
         String username = claimsJws.getBody().getSubject();
         return userDetailsServiceDB.loadUserByUsername(username);
     }
-
 }

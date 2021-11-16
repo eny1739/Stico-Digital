@@ -31,6 +31,4 @@ public interface BookRepository extends CrudRepository<Book, String> {
         @Modifying
         @Query(value = "DELETE FROM mst_book WHERE id=?", nativeQuery = true)
         public void deleteById(String id);
-
-
 }
