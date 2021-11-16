@@ -1,6 +1,6 @@
 package com.enigma.interviewproject.entity;
 
-import org.hibernate.annotations.GenericGenerator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 
@@ -10,10 +10,15 @@ public class Wallet {
 
     @Id
     private String id;
+    private String name;
     private Integer balance = 0;
 
     @Transient
     private String userId;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = true)
+    private UserAccount userAccount;
 
     public Wallet() {
     }
@@ -30,11 +35,24 @@ public class Wallet {
         return balance;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public String getUserId() {
         return userId;
     }
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    @JsonIgnore
+    public UserAccount getUser() {
+        return userAccount;
+    }
+
+    public void setUser(UserAccount userAccount) {
+        this.userAccount = userAccount;
     }
 }

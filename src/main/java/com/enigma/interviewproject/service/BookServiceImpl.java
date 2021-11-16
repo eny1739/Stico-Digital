@@ -30,7 +30,7 @@ public class BookServiceImpl implements BookService{
 
     @Override
     public List<Book> findAll() {
-        return bookRepository.findAllBook();
+        return bookRepository.getAllBook();
     }
 
     @Override
@@ -41,11 +41,11 @@ public class BookServiceImpl implements BookService{
 
     @Override
     public Book getById(String id) {
-        Optional<Book> bookOptional = bookRepository.findById(id);
-        if (!bookOptional.isPresent()){
+        Book book = bookRepository.getById(id);
+        if (book == null){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Buku tidak ditemukan");
         } 
-        return bookOptional.get();
+        return book;
     }
 
     @Override

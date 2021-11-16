@@ -15,10 +15,10 @@ import java.util.Optional;
 public interface BookRepository extends CrudRepository<Book, String> {
 
         @Query(value = "SELECT * FROM mst_book", nativeQuery = true)
-        public List<Book> findAllBook();
+        public List<Book> getAllBook();
 
         @Query(value = "SELECT * FROM mst_book WHERE id=?", nativeQuery = true)
-        public Optional<Book> findById(String id);
+        public Book getById(String id);
 
         @Modifying
         @Query(value = "INSERT INTO mst_book(id, title, publisher, year, price, category, count) values (:id, :title, :publisher, :year, :price, :category, :count)", nativeQuery = true)

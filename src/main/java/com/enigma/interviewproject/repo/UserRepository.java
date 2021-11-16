@@ -1,25 +1,23 @@
 package com.enigma.interviewproject.repo;
 
-import com.enigma.interviewproject.entity.Book;
-import com.enigma.interviewproject.entity.User;
+import com.enigma.interviewproject.entity.UserAccount;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
-public interface UserRepository extends CrudRepository<User, String> {
-
+public interface UserRepository extends CrudRepository<UserAccount, String> {
 
     @Query(value = "SELECT * FROM mst_user", nativeQuery = true)
-    public List<User> findAllUser();
+    public List<UserAccount> getAllUser();
 
     @Query(value = "SELECT * FROM mst_user WHERE id=?", nativeQuery = true)
-    public Book findById();
+    public UserAccount getById(String id);
 
     @Modifying
     @Query(value = "INSERT INTO mst_user(id, name, email, phone_number, address, mother_name, account_number, username, password) values (:id, :name, :email, :phone_number, :address, :mother_name, :account_number, :username, :password)", nativeQuery = true)
@@ -32,4 +30,12 @@ public interface UserRepository extends CrudRepository<User, String> {
     @Modifying
     @Query(value = "DELETE FROM mst_user WHERE id=?", nativeQuery = true)
     public void deleteById(String id);
+
+    @Query(value = "SELECT * FROM mst_user WHERE username=?", nativeQuery = true)
+    public Optional<UserAccount> getUsernameUser(String username);
+
+    @Modifying
+    @Query(value = "INSERT INTO mst_user(id, username, password) values(:id, :username, :password)", nativeQuery = true)
+    public void registerAccount(@Param("id") String id, @Param("username") String name, @Param("password") String password);
+
 }

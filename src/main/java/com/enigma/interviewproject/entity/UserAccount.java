@@ -1,16 +1,14 @@
 package com.enigma.interviewproject.entity;
 
-import org.hibernate.annotations.GenericGenerator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name="mst_user")
-public class User {
+public class UserAccount {
 
     @Id
     private String id;
@@ -23,10 +21,13 @@ public class User {
     private String username;
     private String password;
 
-    public User() {
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "userAccount", cascade = CascadeType.MERGE)
+    private List<Wallet> wallets;
+
+    public UserAccount() {
     }
 
-    public User(String name, String email, String phoneNumber, String address, String motherName, String accountNumber, String username, String password) {
+    public UserAccount(String name, String email, String phoneNumber, String address, String motherName, String accountNumber, String username, String password) {
         this.name = name;
         this.email = email;
         this.phoneNumber = phoneNumber;
@@ -73,16 +74,26 @@ public class User {
         return password;
     }
 
-    public void setPassword(String password) {
+    public String setPassword(String password) {
         this.password = password;
+        return password;
+    }
+
+    @JsonIgnore
+    public List<Wallet> getWallets() {
+        return wallets;
+    }
+
+    public void addWallet(List<Wallet> wallets){
+        this.wallets.addAll(wallets);
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(name, user.name) && Objects.equals(email, user.email) && Objects.equals(phoneNumber, user.phoneNumber) && Objects.equals(address, user.address) && Objects.equals(motherName, user.motherName) && Objects.equals(accountNumber, user.accountNumber) && Objects.equals(username, user.username) && Objects.equals(password, user.password);
+        UserAccount userAccount = (UserAccount) o;
+        return Objects.equals(id, userAccount.id) && Objects.equals(name, userAccount.name) && Objects.equals(email, userAccount.email) && Objects.equals(phoneNumber, userAccount.phoneNumber) && Objects.equals(address, userAccount.address) && Objects.equals(motherName, userAccount.motherName) && Objects.equals(accountNumber, userAccount.accountNumber) && Objects.equals(username, userAccount.username) && Objects.equals(password, userAccount.password);
     }
 
     @Override
