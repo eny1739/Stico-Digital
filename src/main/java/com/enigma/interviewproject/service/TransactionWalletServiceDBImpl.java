@@ -1,7 +1,10 @@
 package com.enigma.interviewproject.service;
 
+import com.enigma.interviewproject.entity.Book;
+import com.enigma.interviewproject.entity.TransactionBook;
 import com.enigma.interviewproject.entity.TransactionWallet;
 import com.enigma.interviewproject.entity.Wallet;
+import com.enigma.interviewproject.repo.TransactionBookRepository;
 import com.enigma.interviewproject.repo.TransactionWalletRepository;
 import com.enigma.interviewproject.util.TransactionType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +27,13 @@ public class TransactionWalletServiceDBImpl {
     WalletService walletService;
 
     @Autowired
+    BookService bookService;
+
+    @Autowired
     TransactionWalletRepository transactionWalletRepository;
+
+    @Autowired
+    TransactionBookRepository transactionBookRepository;
 
     private String getUuid() {
         String uuid = UUID.randomUUID().toString().replaceAll("-","");
@@ -42,6 +51,22 @@ public class TransactionWalletServiceDBImpl {
         transactionWalletRepository.createWalletTransactions(uuid, transactionWallet.getTransactionDate(), "top-up", wallet.getName(), wallet.getId());
         return transactionWalletRepository.getById(uuid);
     }
+
+    public TransactionBook payment(TransactionBook transactionBook, TransactionWallet transactionWallet){
+        Book book = bookService.getById(transactionBook.getBook().getId());
+        Integer price = book.getPrice();
+        Wallet wallet = walletService.getById(transactionWallet.getWallet().getId());
+        wallet.setBalance(wallet.getBalance()-price);
+        book.setCount(book.getCount()-transactionBook.getCount());
+        bookService.update(book);
+        String walletUuid = getUuid();
+        String bookUuid = getUuid();
+        transactionWalletRepository.createWalletTransactions(walletUuid, transactionWallet.getTransactionDate(), "payment", wallet.getName(), wallet.getId());
+        transactionBookRepository.createBookTransactions(bookUuid, transactionBook.getCount(), transactionBook.getSubTotal(), transactionBook.getTransactionDate(), book.getId(), transactionBook.getUserAccount().getId());
+        return transactionBookRepository.getById(bookUuid);
+    }
+
+
 
 
 //    @Override

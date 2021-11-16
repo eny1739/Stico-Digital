@@ -67,6 +67,10 @@ public class Book {
         return count;
     }
 
+    public void setCount(Integer count) {
+        this.count = count;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

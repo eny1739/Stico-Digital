@@ -2,6 +2,7 @@ package com.enigma.interviewproject.entity;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 @Table(name = "tx_user_buy_books")
@@ -74,5 +75,18 @@ public class TransactionBook {
 
     public void setTransactionDate(Date transactionDate) {
         this.transactionDate = transactionDate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TransactionBook that = (TransactionBook) o;
+        return Objects.equals(id, that.id) && Objects.equals(userAccount, that.userAccount) && Objects.equals(book, that.book) && Objects.equals(count, that.count) && Objects.equals(subTotal, that.subTotal) && Objects.equals(transactionDate, that.transactionDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, userAccount, book, count, subTotal, transactionDate);
     }
 }
