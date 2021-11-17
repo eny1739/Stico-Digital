@@ -25,6 +25,12 @@ public class Wallet {
     public Wallet() {
     }
 
+    public Wallet(String name, Integer balance, String userId) {
+        this.name = name;
+        this.balance = balance;
+        this.userId = userId;
+    }
+
     public String getId() {
         return id;
     }
