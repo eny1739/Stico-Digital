@@ -11,6 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -30,7 +31,7 @@ public class BookServiceImpl implements BookService{
 
     @Override
     public List<Book> findAll() {
-        return bookRepository.getAllBook();
+        return bookRepository.getAllBook().stream().collect(Collectors.toList());
     }
 
     @Override

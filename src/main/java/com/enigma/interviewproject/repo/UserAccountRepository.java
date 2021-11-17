@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends CrudRepository<UserAccount, String> {
+public interface UserAccountRepository extends CrudRepository<UserAccount, String> {
 
     @Query(value = "SELECT * FROM mst_user", nativeQuery = true)
     public List<UserAccount> getAllUser();

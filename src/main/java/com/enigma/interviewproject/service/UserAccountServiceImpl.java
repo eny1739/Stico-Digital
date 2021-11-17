@@ -2,7 +2,7 @@ package com.enigma.interviewproject.service;
 
 import com.enigma.interviewproject.dto.UserCredential;
 import com.enigma.interviewproject.entity.UserAccount;
-import com.enigma.interviewproject.repo.UserRepository;
+import com.enigma.interviewproject.repo.UserAccountRepository;
 import com.enigma.interviewproject.security.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,12 +18,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
 public class UserAccountServiceImpl implements UserAccountService {
     @Autowired
-    UserRepository userRepository;
+    UserAccountRepository userAccountRepository;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -40,21 +41,21 @@ public class UserAccountServiceImpl implements UserAccountService {
     @Override
     public UserAccount create(UserAccount userAccount) {
         String uuid = getUuid();
-        while (userRepository.findById(uuid).isPresent()){
+        while (userAccountRepository.findById(uuid).isPresent()){
             uuid = getUuid();
         }
         String password = getEncodePassword(userAccount);
-        userRepository.createUser(uuid, userAccount.getName(), userAccount.getEmail(), userAccount.getPhoneNumber(), userAccount.getAddress(), userAccount.getMotherName(), userAccount.getAccountNumber(), userAccount.getUsername(), password);
+        userAccountRepository.createUser(uuid, userAccount.getName(), userAccount.getEmail(), userAccount.getPhoneNumber(), userAccount.getAddress(), userAccount.getMotherName(), userAccount.getAccountNumber(), userAccount.getUsername(), password);
         return getById(uuid);
     }
 
     public UserAccount register(UserAccount userAccount){
         String uuid = getUuid();
-        while (userRepository.findById(uuid).isPresent()){
+        while (userAccountRepository.findById(uuid).isPresent()){
             uuid = getUuid();
         }
         String password = getEncodePassword(userAccount);
-        userRepository.registerAccount(uuid, userAccount.getUsername(), password);
+        userAccountRepository.registerAccount(uuid, userAccount.getUsername(), password);
         return getById(uuid);
     }
 
@@ -68,18 +69,18 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     @Override
     public List<UserAccount> findAll() {
-        return userRepository.getAllUser();
+        return userAccountRepository.getAllUser().stream().collect(Collectors.toList());
     }
 
     @Override
     public void deleteById(String id) {
         getById(id);
-        userRepository.deleteById(id);
+        userAccountRepository.deleteById(id);
     }
 
     @Override
     public UserAccount getById(String id) {
-        UserAccount userAccount = userRepository.getById(id);
+        UserAccount userAccount = userAccountRepository.getById(id);
         if (userAccount == null){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,"User tidak ditemukan");
         }
@@ -89,7 +90,7 @@ public class UserAccountServiceImpl implements UserAccountService {
     @Override
     public UserAccount update(UserAccount userAccount) {
         getById(userAccount.getId());
-        userRepository.updateBook(userAccount.getId(), userAccount.getName(), userAccount.getEmail(), userAccount.getPhoneNumber(), userAccount.getAddress(), userAccount.getMotherName(), userAccount.getAccountNumber(), userAccount.getUsername(), userAccount.getPassword());
+        userAccountRepository.updateBook(userAccount.getId(), userAccount.getName(), userAccount.getEmail(), userAccount.getPhoneNumber(), userAccount.getAddress(), userAccount.getMotherName(), userAccount.getAccountNumber(), userAccount.getUsername(), userAccount.getPassword());
         return userAccount;
     }
 

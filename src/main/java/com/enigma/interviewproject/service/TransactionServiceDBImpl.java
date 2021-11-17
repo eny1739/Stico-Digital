@@ -16,10 +16,11 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class TransactionWalletServiceDBImpl {
+public class TransactionServiceDBImpl {
     @Autowired
     UserAccountService userAccountService;
 
@@ -63,29 +64,40 @@ public class TransactionWalletServiceDBImpl {
         String bookUuid = getUuid();
         transactionWalletRepository.createWalletTransactions(walletUuid, transactionWallet.getTransactionDate(), "payment", wallet.getName(), wallet.getId());
         transactionBookRepository.createBookTransactions(bookUuid, transactionBook.getCount(), transactionBook.getSubTotal(), transactionBook.getTransactionDate(), book.getId(), transactionBook.getUserAccount().getId());
-        return transactionBookRepository.getById(bookUuid);
+        return transactionBookRepository.getTransactionBookById(bookUuid);
     }
 
+    public List<TransactionBook> getAllTransactionBook(){
+        return transactionBookRepository.getAllTransactionBook().stream().collect(Collectors.toList());
+    }
 
+    public List<TransactionWallet> getAllTransactionWallet(){
+        return transactionWalletRepository.getAllTransactionWallet().stream().collect(Collectors.toList());
+    }
 
+    public void deleteWalletTransactionById(String id) {
+        getTransactionWalletById(id);
+        transactionWalletRepository.deleteWalletTransactionById(id);
+    }
 
-//    @Override
-//    public List<TransactionWallet> findAll() {
-//        return null;
-//    }
-//
-//    @Override
-//    public void deleteById(String id) {
-//
-//    }
-//
-//    @Override
-//    public TransactionWallet getById(String id) {
-//        return null;
-//    }
+    public TransactionWallet getTransactionWalletById(String id) {
+        TransactionWallet transactionWallet = transactionWalletRepository.getById(id);
+        if (transactionWallet == null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Transaksi tidak ditemukan");
+        }
+        return transactionWallet;
+    }
 
-//    @Override
-//    public TransactionWallet update(TransactionWallet transactionWallet) {
-//        return null;
-//    }
+    public void deleteBookTransactionById(String id) {
+        getTransactionBookById(id);
+        transactionBookRepository.deleteBookTransactionById(id);
+    }
+
+    public TransactionBook getTransactionBookById(String id) {
+        TransactionBook transactionBook = transactionBookRepository.getTransactionBookById(id);
+        if (transactionBook == null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Transaksi tidak ditemukan");
+        }
+        return transactionBook;
+    }
 }

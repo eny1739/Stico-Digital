@@ -1,6 +1,5 @@
 package com.enigma.interviewproject.security;
 
-import com.enigma.interviewproject.repo.UserRepository;
 import com.enigma.interviewproject.service.UserDetailsServiceDBImpl;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;

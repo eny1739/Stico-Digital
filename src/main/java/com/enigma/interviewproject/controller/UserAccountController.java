@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-public class UserController {
+public class UserAccountController {
 
     @Autowired
     UserAccountServiceImpl userAccountService;

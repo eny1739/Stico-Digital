@@ -1,5 +1,6 @@
 package com.enigma.interviewproject.repo;
 
+import com.enigma.interviewproject.entity.Book;
 import com.enigma.interviewproject.entity.TransactionBook;
 import com.enigma.interviewproject.entity.TransactionWallet;
 import org.springframework.data.jpa.repository.Modifying;
@@ -9,12 +10,24 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
+import java.util.List;
 
 @Repository
 public interface TransactionBookRepository extends CrudRepository<TransactionBook, String> {
 
     @Query(value = "SELECT * FROM tx_user_buy_books WHERE id=?", nativeQuery = true)
-    public TransactionBook getById(String id);
+    public TransactionBook getTransactionBookById(String id);
+
+    @Query(value = "SELECT * FROM tx_user_buy_books", nativeQuery = true)
+    public List<TransactionBook> getAllTransactionBook();
+
+    @Modifying
+    @Query(value = "DELETE FROM tx_user_buy_books WHERE id=?", nativeQuery = true)
+    public void deleteBookTransactionById(String id);
+
+    @Modifying
+    @Query(value = "UPDATE tx_user_buy_books SET count, sub_total, transaction_date, book_id, user_id WHERE id=?", nativeQuery = true)
+    public void updateBookTransaction(String id, Integer count, Integer sub_total, Date transaction_date, String book_id, String user_id);
 
     @Modifying
     @Query(value = "INSERT INTO tx_user_buy_books(id, count, sub_total, transaction_date, book_id, user_id) values (:id, :count, :sub_total, :transaction_date, :book_id, :user_id)", nativeQuery = true)
