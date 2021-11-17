@@ -24,6 +24,14 @@ public class WalletServiceImpl implements WalletService{
     @Autowired
     UserAccountService userAccountService;
 
+    private String getUUID() {
+        String uuid = UUID.randomUUID().toString().replaceAll("-","");
+        while (walletRepository.getById(uuid) != null){
+            uuid = UUID.randomUUID().toString().replaceAll("-","");
+        }
+        return uuid;
+    }
+
     private void walletTypeValidation(Wallet wallet) {
         if(!(wallet.getName().equals("AVA") || wallet.getName().equals("DONO") || wallet.getName().equals("GAPAY"))){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Jenis wallet tidak ada");
@@ -32,10 +40,7 @@ public class WalletServiceImpl implements WalletService{
 
     @Override
     public Wallet create(Wallet wallet) {
-        String uuid = UUID.randomUUID().toString().replaceAll("-","");
-        while (walletRepository.getById(uuid) != null){
-            uuid = UUID.randomUUID().toString().replaceAll("-","");
-        }
+        String uuid = getUUID();
         UserAccount userAccount = userAccountService.getById(wallet.getUserId());
         wallet.setUserAccount(userAccount);
         walletTypeValidation(wallet);

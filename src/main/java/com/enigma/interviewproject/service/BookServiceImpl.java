@@ -19,12 +19,17 @@ public class BookServiceImpl implements BookService{
     @Autowired
     BookRepository bookRepository;
 
-    @Override
-    public Book create(Book book) {
+    private String getUUID() {
         String uuid = UUID.randomUUID().toString().replaceAll("-","");
         while (bookRepository.findById(uuid).isPresent()){
             uuid = UUID.randomUUID().toString().replaceAll("-","");
         }
+        return uuid;
+    }
+
+    @Override
+    public Book create(Book book) {
+        String uuid = getUUID();
         bookRepository.createBook(uuid, book.getTitle(), book.getPublisher(), book.getYear(), book.getPrice(), book.getCategory(), book.getCount());
         return getById(uuid);
     }

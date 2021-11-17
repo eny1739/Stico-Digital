@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -57,7 +56,12 @@ public class TransactionServiceDBImpl {
         Book book = bookService.getById(transactionBook.getBook().getId());
         Integer price = book.getPrice();
         Wallet wallet = walletService.getById(transactionWallet.getWallet().getId());
-        wallet.setBalance(wallet.getBalance()-price);
+        if (wallet.getBalance() > price){
+            wallet.setBalance(wallet.getBalance()-price);
+        } else  {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Saldo tidak mencukupi");
+        }
+
         book.setCount(book.getCount()-transactionBook.getCount());
         bookService.update(book);
         String walletUuid = getUuid();
