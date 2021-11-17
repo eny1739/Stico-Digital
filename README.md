@@ -51,6 +51,14 @@ running application
 java -jar target/InterviewProject-0.0.1-SNAPSHOT.jar
 ```
 
+regitration
+```json
+{
+  "username": "stitch",
+  "password": "stitch"
+}
+```
+
 ### REST API Documentation
 
 For access this REST API user can access [swagger UI]: http://localhost:8086/swagger-ui.html#/	"REST API Documentation for Stico Digital" after user running this application
