@@ -34,6 +34,7 @@ public class AuthenticatorAdaptor extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests().antMatchers("/register").permitAll()
                 .antMatchers("/signin").permitAll()
+                .antMatchers("/users").permitAll()
                 .anyRequest().authenticated()
                 .and().addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
