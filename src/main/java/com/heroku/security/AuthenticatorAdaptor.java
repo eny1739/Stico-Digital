@@ -32,9 +32,9 @@ public class AuthenticatorAdaptor extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.httpBasic().and().csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .authorizeRequests().antMatchers("/register").permitAll()
-                .antMatchers("/signin").permitAll()
-                .antMatchers("/users").permitAll()
+                .authorizeRequests().antMatchers("/api/register").permitAll()
+                .antMatchers("/api/signin").permitAll()
+                .antMatchers("/api/users").permitAll()
                 .anyRequest().authenticated()
                 .and().addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
