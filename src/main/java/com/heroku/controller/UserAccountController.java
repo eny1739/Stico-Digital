@@ -16,37 +16,37 @@ public class UserAccountController {
     UserAccountServiceImpl userAccountService;
 
 
-    @GetMapping("/users")
+    @GetMapping("/api/users")
     public List<UserAccount> findAllBooks(){
         return userAccountService.findAll();
     }
 
-    @GetMapping("/user/{id}")
+    @GetMapping("/api/user/{id}")
     public UserAccount getById(@PathVariable(name = "id") String id) {
         return userAccountService.getById(id);
     }
 
-    @PostMapping("/user")
+    @PostMapping("/api/user")
     public UserAccount createUser(@RequestBody UserAccount userAccount){
         return userAccountService.create(userAccount);
     }
 
-    @PostMapping("/signin")
+    @PostMapping("/api/signin")
     public Map<String, Object> signin(@RequestBody UserCredential userCredential){
         return userAccountService.signIn(userCredential);
     }
 
-    @PostMapping("/register")
+    @PostMapping("/api/register")
     public UserAccount registerAccount(@RequestBody UserAccount userAccount){
         return userAccountService.register(userAccount);
     }
 
-    @DeleteMapping("/user/{id}")
+    @DeleteMapping("/api/user/{id}")
     public void deleteById(@PathVariable(name = "id") String id){
         userAccountService.deleteById(id);
     }
 
-    @PutMapping("/user")
+    @PutMapping("/api/user")
     public UserAccount update(@RequestBody UserAccount userAccount) {
         return userAccountService.update(userAccount);
     }

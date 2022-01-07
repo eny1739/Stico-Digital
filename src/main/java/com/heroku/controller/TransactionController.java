@@ -16,42 +16,42 @@ public class TransactionController {
     @Autowired
     TransactionServiceDBImpl transactionWalletServiceDB;
 
-    @PostMapping("/topup")
+    @PostMapping("/api/topup")
     public TransactionWallet topUpWallet(@RequestBody TopUpDto topUpDto){
         return transactionWalletServiceDB.topUp(topUpDto.getTransactionWallet(), topUpDto.getTopUpBalance());
     }
 
-    @PostMapping("/payment")
+    @PostMapping("/api/payment")
     public TransactionBook payBook(@RequestBody PaymentDto paymentDto){
         return transactionWalletServiceDB.payment(paymentDto.getTransactionBook(), paymentDto.transactionWallet);
     }
 
-    @GetMapping("/payments")
+    @GetMapping("/api/payments")
     public List<TransactionBook> getAllTransactionBook(){
         return transactionWalletServiceDB.getAllTransactionBook();
     }
 
-    @GetMapping("/topups")
+    @GetMapping("/api/topups")
     public List<TransactionWallet> getAllTransactionWallet(){
         return transactionWalletServiceDB.getAllTransactionWallet();
     }
 
-    @GetMapping("/payment/{id}")
+    @GetMapping("/api/payment/{id}")
     public TransactionBook getTransactionBookById(@PathVariable(name = "id") String id){
         return transactionWalletServiceDB.getTransactionBookById(id);
     }
 
-    @GetMapping("/topup/{id}")
+    @GetMapping("/api/topup/{id}")
     public TransactionWallet getTransactionWalletById(@PathVariable(name = "id") String id){
         return transactionWalletServiceDB.getTransactionWalletById(id);
     }
 
-    @DeleteMapping("/payment/{id}")
+    @DeleteMapping("/api/payment/{id}")
     public void deleteTransactionBookById(@PathVariable(name = "id") String id){
         transactionWalletServiceDB.deleteBookTransactionById(id);
     }
 
-    @DeleteMapping("/topup/{id}")
+    @DeleteMapping("/api/topup/{id}")
     public void deleteTransactionWalletById(@PathVariable(name = "id") String id){
         transactionWalletServiceDB.deleteWalletTransactionById(id);
     }

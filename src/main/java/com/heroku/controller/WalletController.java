@@ -13,20 +13,20 @@ public class WalletController {
     @Autowired
     WalletService walletService;
 
-    @PostMapping("/wallet")
+    @PostMapping("/api/wallet")
     public Wallet createWallet(@RequestBody Wallet wallet){
         return walletService.create(wallet);
     }
 
-    @GetMapping("/wallets")
+    @GetMapping("/api/wallets")
     public List<Wallet> findAllWallets(){return  walletService.findAll();}
 
-    @GetMapping("/wallet/{id}")
+    @GetMapping("/api/wallet/{id}")
     public Wallet getById(@PathVariable(name = "id") String id){return walletService.getById(id);}
 
-    @DeleteMapping("/wallet/{id}")
+    @DeleteMapping("/api/wallet/{id}")
     public void deleteById(@PathVariable(name = "id") String id){walletService.deleteById(id);}
 
-    @PutMapping("/wallet")
+    @PutMapping("/api/wallet")
     public Wallet updateWallet(@RequestBody Wallet wallet){return walletService.update(wallet);}
 }
